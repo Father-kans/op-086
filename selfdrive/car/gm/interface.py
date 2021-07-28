@@ -78,6 +78,8 @@ class CarInterface(CarInterfaceBase):
     ret.minSteerSpeed = 7 * CV.MPH_TO_MS
     ret.lateralTuning.pid.kiBP, ret.lateralTuning.pid.kpBP = [[0.], [0.]]
     ret.lateralTuning.pid.kpV, ret.lateralTuning.pid.kiV = [[0.192], [0.021]]
+    ret.lateralTuning.pid.kdBP = [0.]
+    ret.lateralTuning.pid.kdV = [0.00022]  #corolla from shane fork : 0.725
     ret.lateralTuning.pid.kf = 0.00007  # full torque for 20 deg at 80mph means 0.00007818594
     ret.steerRateCost = 0.4
     ret.steerActuatorDelay = 0.175  # Default delay, not measured yet	  
@@ -144,18 +146,18 @@ class CarInterface(CarInterfaceBase):
 
     ret.stoppingControl = True
 
-    ret.steerMaxBP = [10., 25.]
+    ret.steerMaxBP = [8.3, 33.]
     ret.steerMaxV = [1.4, 1.2]
 
     ret.longitudinalTuning.deadzoneBP = [0., 8.05]
     ret.longitudinalTuning.deadzoneV = [.0, .14]
 
     ret.longitudinalTuning.kpBP = [0., 15., 33.]
-    ret.longitudinalTuning.kpV = [1.3, 2.2, 1.5]
-    ret.longitudinalTuning.kiBP = [0., 5., 12., 20., 27.]
-    ret.longitudinalTuning.kiV = [.35, .23, .20, .17, .13]
+    ret.longitudinalTuning.kpV = [1.9, 2.2, 1.5]
+    ret.longitudinalTuning.kiBP = [0., 5., 12., 23., 33.]
+    ret.longitudinalTuning.kiV = [.35, .31, .20, .17, .13]
     ret.longitudinalTuning.kfBP = [13.8, 33.]
-    ret.longitudinalTuning.kfV = [1.5, 0.9]
+    ret.longitudinalTuning.kfV = [1.6, 0.9]
     ret.brakeMaxBP = [0, 19.7, 33.]
     ret.brakeMaxV = [1.6, 1.3, 0.8]
     ret.stoppingBrakeRate = 0.1 # reach stopping target smoothly
