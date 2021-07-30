@@ -681,7 +681,6 @@ void ui_nvg_init(UIState *s) {
     {"wheel", "../assets/img_chffr_wheel.png"},
     {"driver_face", "../assets/img_driver_face.png"},
     {"brake", "../assets/img_brake_disc.png"},
-    {"autohold_warning", "../assets/img_autohold_warning.png"},
     {"autohold_active", "../assets/img_autohold_active.png"},
   };
   for (auto [name, file] : images) {
