@@ -37,6 +37,20 @@ def set_realtime_priority(level: int) -> None:
     os.sched_setscheduler(0, os.SCHED_FIFO, os.sched_param(level))  # type: ignore[attr-defined]
 
 
+
+def set_core_affinity(core: int) -> None:
+    if not PC:
+      try :
+        os.sched_setaffinity(0,[core,])
+      except :
+        if core == 3:
+          os.sched_setaffinity(0,[1,])
+        else :
+          os.sched_staffinity(0, [0,])
+#    os.sched_setaffinity(0, [core,])
+
+
+
 def set_core_affinity(core: int) -> None:
   if not PC:
     os.sched_setaffinity(0, [core,])
