@@ -6,7 +6,7 @@ from selfdrive.config import Conversions as CV
 from selfdrive.car.gm.values import CAR, Ecu, ECU_FINGERPRINT, CruiseButtons, \
                                     AccState, FINGERPRINTS
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, is_ecu_disconnected, gen_empty_fingerprint
-from selfdrive.car.interfaces import CarInterfaceBase
+from selfdrive.car.interfaces import CarInterfaceBase, DISENGAGE_ON_GAS
 
 FOLLOW_AGGRESSION = 0.15 # (Acceleration/Decel aggression) Lower is more aggressive
 
@@ -194,14 +194,14 @@ class CarInterface(CarInterfaceBase):
     if self.CS.cruise_buttons != self.CS.prev_cruise_buttons and self.CS.prev_cruise_buttons != CruiseButtons.INIT:
       be = car.CarState.ButtonEvent.new_message()
       be.type = ButtonType.unknown
-      if self.CS.cruise_buttons != CruiseButtons.UNPRESS:
+      if (self.CS.cruise_buttons != CruiseButtons.UNPRESS) or DISENGAGE_ON_GAS:
         be.pressed = True
         but = self.CS.cruise_buttons
       else:
         be.pressed = False
         but = self.CS.prev_cruise_buttons
       if but == CruiseButtons.RES_ACCEL:
-        if not (ret.cruiseState.enabled and ret.standstill):
+        if not (ret.cruiseState.enabled and ret.standstill) or DISENGAGE_ON_GAS:
           be.type = ButtonType.accelCruise  # Suppress resume button if we're resuming from stop so we don't adjust speed.
       elif but == CruiseButtons.DECEL_SET:
         if not cruiseEnabled and not self.CS.lkMode:

@@ -89,7 +89,7 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     startupNoControl @77;
     startupMaster @78;
     startupFuzzyFingerprint @97;
-
+    startupNoFw @104;
     fcw @79;
     steerSaturated @80;
     belowEngageSpeed @84;
@@ -103,16 +103,20 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     processNotRunning @95;
     dashcamMode @96;
     controlsInitializing @98;
-    
+    usbError @99;
+    roadCameraError @100;
+    driverCameraError @101;
+    wideRoadCameraError @102;
+    localizerMalfunction @103;
     #Autohold Activate
-    autoHoldActivated @99;
+    autoHoldActivated @105;
 
     #Enable greyPanda
-    startupGreyPanda @100;
+    startupGreyPanda @106;
 
     #Road speed Limiter
-    slowingDownSpeed @101;
-    slowingDownSpeedSound @102;
+    slowingDownSpeed @107;
+    slowingDownSpeedSound @108;
 
     driverMonitorLowAccDEPRECATED @68;
     radarCanErrorDEPRECATED @15;
@@ -134,13 +138,6 @@ struct CarEvent @0x9b1657f34caf3ad3 {
     neosUpdateRequiredDEPRECATED @88;
     modelLagWarningDEPRECATED @93;
     startupOneplusDEPRECATED @82;
-
-    usbError @103;
-    roadCameraError @104;
-    driverCameraError @105;
-    wideRoadCameraError @106;
-    localizerMalfunction @107;
-    startupNoFw @108;
   }
 }
 
@@ -156,6 +153,7 @@ struct CarState {
   vEgoRaw @17 :Float32;     # unfiltered speed from CAN sensors
   yawRate @22 :Float32;     # best estimate of yaw rate
   standstill @18 :Bool;
+  brakeLights @19 :Bool;
   wheelSpeeds @2 :WheelSpeeds;
 
   # gas pedal, 0.0-1.0
@@ -165,7 +163,6 @@ struct CarState {
   # brake pedal, 0.0-1.0
   brake @5 :Float32;      # this is user pedal only
   brakePressed @6 :Bool;  # this is user pedal only
-  brakeLights @19 :Bool;
 
   # steering wheel
   steeringAngleDeg @7 :Float32;
@@ -201,20 +198,17 @@ struct CarState {
   clutchPressed @28 :Bool;
 
   #Kegman 3Bar Distance Profile
-  cruiseGap @41 : Int32;  
   readdistancelines @37 :Float32;
   lkMode @38 :Bool;
   engineRPM @39 :Float32;
-
+  # Autohold for GM
+  autoHoldActivated @40 :Bool;
   # which packets this state came from
   canMonoTimes @12: List(UInt64);
 
   # blindspot sensors
   leftBlindspot @33 :Bool; # Is there something blocking the left lane change
   rightBlindspot @34 :Bool; # Is there something blocking the right lane change
-
-  # Autohold for GM
-  autoHoldActivated @40 :Bool;
 
   struct WheelSpeeds {
     # optional wheel speeds
@@ -467,11 +461,11 @@ struct CarParams {
     kpV @1 :List(Float32);
     kiBP @2 :List(Float32);
     kiV @3 :List(Float32);
-    kf @6 :Float32;
+    kf @4 :Float32;
 
     #D gain
-    kdBP @4 :List(Float32);
-    kdV @5 :List(Float32);
+    kdBP @5 :List(Float32);
+    kdV @6 :List(Float32);
   }
 
   struct LongitudinalPIDTuning {
@@ -479,10 +473,10 @@ struct CarParams {
     kpV @1 :List(Float32);
     kiBP @2 :List(Float32);
     kiV @3 :List(Float32);
-    kfBP @4 :List(Float32);
-    kfV @5 :List(Float32);
-    deadzoneBP @6 :List(Float32);
-    deadzoneV @7 :List(Float32);
+    deadzoneBP @4 :List(Float32);
+    deadzoneV @5 :List(Float32);
+    kfBP @6 :List(Float32);
+    kfV @7 :List(Float32);
   }
 
   struct LateralINDITuning {
